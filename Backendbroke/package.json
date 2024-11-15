@@ -1,0 +1,29 @@
+{
+  "name": "backendbroke",
+  "version": "1.0.0",
+  "description": "helo",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/index.js"
+  },
+  "keywords": [
+    "hello",
+    "hy"
+  ],
+  "author": "vaibhav",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "for": "^0.0.1-dev.0",
+    "jws": "^4.0.0",
+    "mongoose": "^8.8.1",
+    "nodemon": "^3.1.7",
+    "refresh": "^1.0.1",
+    "security": "^1.0.0",
+    "token": "^0.1.0"
+  }
+}
