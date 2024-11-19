@@ -1,21 +1,27 @@
-const express = require('express');
-const app = express();
-const PORT = 3000;
+import dotenv from 'dotenv'; // For environment variables
+import connectDB from './db/index.js';
+import { app } from './app.js';
+import userRouter from './router/user.router.js'; // Import user routes
 
-// Middleware to parse JSON data
-app.use(express.json());
+dotenv.config(); // Load environment variables from .env file
 
-// Sample route
+// Ensure that the PORT variable is loaded correctly
+const PORT = process.env.PORT || 8000;
+
 app.get('/', (req, res) => {
-  res.send('Hello, welcome to my server!');
+    res.status(200).send('Landing Page');
 });
 
-// Another example route
-app.get('/api/test', (req, res) => {
-  res.json({ message: 'This is a test route' });
-});
+// Use imported routes
+app.use('/api/v1/users', userRouter);
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+// Connect to the database and start the server
+connectDB()
+    .then(() => {
+        app.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}`);
+        });
+    })
+    .catch((err) => {
+        console.error('MongoDB connection failed:', err);
+    });
