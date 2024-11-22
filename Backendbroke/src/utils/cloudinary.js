@@ -1,32 +1,38 @@
 import { v2 as cloudinary } from 'cloudinary';
-import fs from 'fs'  //it is a temp file where we store img temparary 
+import fs from 'fs';  // For deleting temp files
 
-
-   // Configuration
-   cloudinary.config({ 
+// Cloudinary Configuration
+cloudinary.config({ 
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
     api_key: process.env.CLOUDINARY_API_KEY, 
-    api_secret: process.env.CLOUDINARY_API_SECRET // Click 'View API Keys' above to copy your API secret
+    api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+const uploadOnCloudinary = async (localFilePath) => {
+  try {
+    if (!localFilePath) return null;
 
-const uploadOnCloudinary=async (localFilePath)=> {
-// Upload an image
-try {
-    if(!localFilePath) return null
-    const response = await cloudinary.uploader
-       .upload(localFilePath,
-        {
-            resource_type:"auto"
-        })
-    //   file has been uploaded successfully 
-  fs.unlinkSync(localFilePath)  //delete from temp
+    // Check if the file exists before uploading
+    if (!fs.existsSync(localFilePath)) {
+      console.log(`File not found: ${localFilePath}`);
+      return null;
+    }
+
+    // Upload the image
+    const response = await cloudinary.uploader.upload(localFilePath, {
+      resource_type: "auto",
+    });
+
+    // If the file has been uploaded successfully, delete the local file
+    fs.unlinkSync(localFilePath);  // Delete from temp
     return response;
-} catch (error) {
-    fs.unlinkSync(localFilePath);  //remove the locally saved temp file as the upload operation got failed 
+  } catch (error) {
+    console.error('Error uploading file:', error);
+    if (fs.existsSync(localFilePath)) {
+      fs.unlinkSync(localFilePath);  // Ensure temp file is removed on failure
+    }
     return null;
-}
-}     
+  }
+};
 
-export {uploadOnCloudinary}
-    
+export { uploadOnCloudinary };

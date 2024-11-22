@@ -2,6 +2,7 @@ import dotenv from 'dotenv'; // For environment variables
 import connectDB from './db/index.js';
 import { app } from './app.js';
 import userRouter from './router/user.router.js'; // Import user routes
+import listingRoutes from './router/card.router.js'
 
 dotenv.config(); // Load environment variables from .env file
 
@@ -14,6 +15,7 @@ app.get('/', (req, res) => {
 
 // Use imported routes
 app.use('/api/v1/users', userRouter);
+app.use('/api/listings', listingRoutes);
 
 // Connect to the database and start the server
 connectDB()
